@@ -1,337 +1,49 @@
-from __builtins__ import *
+# =============================================================================
+# main.py —— 唯一入口(TFWR / 编程农场)
+#
+# 怎么用:
+#   只想跑一种玩法,就把最上面那行 import 改成对应的库,再把下面某一行取消注释。
+#   不要一次 import 多个库,不同库里有同名函数,会互相覆盖。
+#
+#   跑单线程玩法 →   from single import *
+#   跑多线程玩法 →   from multi import *
+#   跑旧版代码   →   from old_codes import *
+#
+# 各库能调用什么(细节看库文件头部注释):
+#   single.py: main()(整田混种+巨型南瓜+仙人掌+迷宫)/ plant_cactus_sort() /
+#              plant_pumpkin_big(x,y) / get_mazes() / dfs(方向) / dino()
+#   multi.py:  main_plant_cactus() / main_plant_pumpkin_32x32() /
+#              mian_plant_sunflower() / mian_plant_carrot()
+#   old_codes.py: main() / pbchf() / ptree() / phay() / pbch() / plant_cactus_sort() /
+#              old_main1() / old_mian_plant_cactus() ...
+#
+# lib.py 是工具库(goto / plant_* / water),single.py 和 multi.py 都自带它,不用单独 import。
+#
+# 作者:miko   整理日期:2026-10-08
+# =============================================================================
+from single import *          # 换玩法时改这一行:single / multi / old_codes
+# from multi import *
+# from old_codes import *
 
-# Metaroot 制作了这个游戏
-# The Farmer Was Replaced
-# 编程农场
+if __name__ == "__main__":
+    goto(0, 0)
+    # init()          # 清空整块田并回到 (0,0),慎用
 
-def goto(x, y):
-    if x >= get_world_size() or y >= get_world_size():
-        return None
-    if x > get_pos_x(): 
-        while x - get_pos_x():
-            move(East)
-    elif x < get_pos_x():
-        while x - get_pos_x():
-            move(West)
-    if y > get_pos_y(): 
-        while y - get_pos_y():
-            move(North)
-    elif y < get_pos_y():
-        while y - get_pos_y():
-            move(South)
+    # ---- 选一个开跑(取消注释)----
+    # --- 单线程 ---
+    # main()                     # 整田混种 -> 4 块 6x6 巨型南瓜 -> 仙人掌排序 -> 迷宫寻宝
+    # plant_cactus_sort()        # 只做 16x16 仙人掌排序 + 一次连锁收获
+    # get_mazes()
+    # dfs(West)                  # 造完迷宫后寻宝(挂机刷金可循环这两行)
+    # dino()                     # 恐龙摘 10 个苹果的最小验证
 
-def moveto(direction, s):
-    for i in range(s):
-        move(direction)
+    # --- 多线程(把上面 import 换成 multi)---
+    # main_plant_cactus()        # 满田仙人掌:32 列并行排列 -> 32 行并行排行 -> 收获
+    # main_plant_pumpkin_32x32() # 32 列并行南瓜
+    # mian_plant_sunflower()     # 32 列并行向日葵
+    # mian_plant_carrot()        # 32 列并行胡萝卜
 
-def set_ground(g):
-    if get_ground_type() != g:
-        till()
-
-def plant_bush():
-    set_ground(Grounds.Grassland)
-    if plant(Entities.Bush):
-        move(North)
-
-def plant_carrot():
-    set_ground(Grounds.Soil)
-    if plant(Entities.Carrot):
-        move(North)
-
-def plant_pumpkin():
-    set_ground(Grounds.Soil)
-    if plant(Entities.Pumpkin):
-        move(North)
-
-def plant_hay():
-    set_ground(Grounds.Grassland)
-    move(North)
-
-def plant_tree():
-    set_ground(Grounds.Grassland)
-    if plant(Entities.Tree):
-        move(North)
-
-def plant_cactus():
-    set_ground(Grounds.Soil)
-    if plant(Entities.Cactus):
-        move(North)
-
-def plant_sunflower():
-    set_ground(Grounds.Soil)
-    if plant(Entities.Sunflower):
-        move(North)
-
-def init():
-    clear()
-    goto(0,0)
-
-def water():
-    use_item(Items.Water)
-    use_item(Items.Water)
-
-# strategy ---------------------
-
-def ptree():
-    while True:
-        goto(0,0)
-        for x in range(get_world_size()):
-            for y in range(get_world_size()):
-                if can_harvest():
-                    harvest()
-                    if x % 2 == 0:
-                        if y % 2 == 0:
-                            plant_tree()
-                        else:
-                            plant_hay()
-                    elif x % 2 != 0:
-                        if y % 2 != 0:
-                            plant_tree()
-                        else:
-                            plant_hay()
-                else:
-                    move(North)
-            move(East)
-def pbch():
-    while True:
-        goto(0,0)
-        for x in range(get_world_size()):
-            for y in range(get_world_size()):
-                if can_harvest():
-                    harvest()
-                    if x >= 16:
-                        plant_carrot()
-                    elif (x >= 0) and (x % 2 == 0):
-                        if y % 2 == 0:
-                            plant_tree()
-                        else:
-                            plant_hay()
-                    elif (x >= 0) and (x % 2 != 0):
-                        if y % 2 != 0:
-                            plant_tree()
-                        else:
-                            plant_hay()
-                else:
-                    move(North)
-            move(East)
-
-def phay():
-    while True:
-        goto(0,0)
-        for x in range(get_world_size()):
-            for y in range(get_world_size()):
-                if can_harvest():
-                    harvest()
-                move(North)
-            move(East)
-
-def pbchf():
-    while True:
-        goto(0,0)
-        for x in range(get_world_size()):
-            for y in range(get_world_size()):
-                water()
-                if can_harvest():
-                    harvest()
-                    if x >= 28:
-                        plant_sunflower()
-                    elif x >= 12:
-                        plant_carrot()
-                    elif x >= 0 and (x % 2 == 0):
-                        if y % 2 == 0:
-                            plant_tree()
-                        else:
-                            plant_hay()
-                    elif x >= 0 and (x % 2 != 0):
-                        if y % 2 != 0:
-                            plant_tree()
-                        else:
-                            plant_hay()
-                else:
-                    move(North)
-            move(East)
-
-# MAIN ########################################################################
-
-def main():
-    while True:
-        goto(0,0)
-        for x in range(get_world_size()):
-            for y in range(get_world_size()):
-                water()
-                if can_harvest():
-                    harvest()
-                if x >= 24:
-                    plant_carrot()
-                elif x >= 8:
-                    plant_sunflower()
-                elif x >= 0 and (x % 2 == 0):
-                    if y % 2 == 0:
-                        plant_tree()
-                        use_item(Items.Fertilizer)
-                    else:
-                        plant_hay()
-                elif x >= 0 and (x % 2 != 0):
-                    if y % 2 != 0:
-                        plant_tree()
-                        use_item(Items.Fertilizer)
-                    else:
-                        plant_hay()
-            move(East)
-        # plant 6x6 big pumpkin
-        for i in range(4):
-            plant_pumpkin_big(26,i * 6 + i * 1)
-        plant_cactus_sort() # plant Cactus
-        for x in range(get_world_size()):
-            for y in range(get_world_size()):
-                harvest()
-                move(North)
-            move(East)
-        get_mazes() # create maze
-        # search Gold
-        if dfs(North) == False:
-            dfs(South)
-
-def plant_pumpkin_big(tx,ty):
-    goto(tx,ty)
-    for y in range(ty, ty+6):
-        if y % 2:
-            for x in range(tx+5,tx-1,-1):
-                water()
-                goto(x,y)
-                if can_harvest():
-                    harvest()
-                plant_pumpkin()
-        else:
-            for x in range(tx,tx+6,1):
-                water()
-                goto(x,y)
-                if can_harvest():
-                    harvest()
-                plant_pumpkin()
-    goto(tx,ty)
-    n = 0
-    bad = []
-    while True:
-        for y in range(ty, ty+6):
-            if y % 2:
-                for x in range(tx+5,tx-1,-1):
-                    goto(x,y)
-                    if can_harvest():
-                        if (x,y) in bad:
-                            bad.remove((x,y))
-                    else:
-                        plant_pumpkin()
-                        if (x,y) not in bad:
-                            bad.append((x,y))
-            else:
-                for x in range(tx,tx+6,1):
-                    goto(x,y)
-                    if can_harvest():
-                        if (x,y) in bad:
-                            bad.remove((x,y))
-                    else:
-                        plant_pumpkin()
-                        if (x,y) not in bad:
-                            bad.append((x,y))
-        do_a_flip()
-        if len(bad) == 0:
-            harvest()
-            break
-
-def plant_cactus_sort():
-    goto(0,0)
-    for x in range(17):
-        for y in range(16):
-            if can_harvest():
-                harvest()
-                plant_cactus()
-            else:
-                plant_cactus()
-        goto(x,0)
-    goto(0,0)
-    array2d = []
-    for x in range(0,16):
-        array = []
-        for y in range(0,16):
-            goto(x,y)
-            array.append(measure())
-        array2d.append(array)
-    for x in range(0,16):
-        for y in range(0,16):
-            swapped = False
-            for yi in range(0, 16-y-1):
-                if array2d[x][yi] > array2d[x][yi+1]:
-                    array2d[x][yi],array2d[x][yi+1]=array2d[x][yi+1],array2d[x][yi]
-                    goto(x,yi)
-                    swap(North)
-                    swapped = True
-            if not swapped:
-                break
-    for y in range(0,16):
-        for x in range(0,16):
-            swapped = False
-            for xi in range(0, 16-x-1):
-                if array2d[xi][y] > array2d[xi+1][y]:
-                    array2d[xi][y],array2d[xi+1][y]=array2d[xi+1][y],array2d[xi][y]
-                    goto(xi,y)
-                    swap(East)
-                    swapped = True
-            if not swapped:
-                break
-    goto(0,0)
-    if can_harvest():
-        harvest()
-
-def get_mazes():
-    goto(0,15)
-    harvest()
-    water()
-    set_ground(Grounds.Grassland)
-    plant(Entities.Bush)
-    use_item(Items.Weird_Substance, get_world_size() * 2**(num_unlocked(Unlocks.Mazes) - 1))
-
-def dfs(before):
-    opposite={East:West,West:East,North:South,South:North}
-    if (get_pos_x(),get_pos_y()) == measure():
-        harvest()
-        return True
-    dire=[East,South,West,North]
-    s = []
-    for d in dire:
-        if d == opposite[before]:
-            continue
-        if can_move(d):
-            s.append(d)
-    for m in s:
-        move(m)
-        if dfs(m):
-            return True
-    move(opposite[before])
-    return False
-
-def dino():
-    goto(0,0)
-    i = 0
-    change_hat(Hats.Dinosaur_Hat)
-    nx,ny=measure()
-    while True:
-        if i >=10:
-            break
-        nx,ny=measure()
-        if (nx==None)or(ny==None):
-            return False
-        goto(nx,ny)
-        i+=1
-    change_hat(Hats.Brown_Hat)
-
-if __name__ == '__main__':
-    #clear()         
-    #init()
-    goto(0,0)
-    #pbchf()
-    #main()
-    #plant_cactus_sort()
-    #clear()
-
-
+    # --- 旧版(把上面 import 换成 old_codes)---
+    # main()                     # 旧版单机主线
+    # pbchf()                    # 旧版混种
+    # old_main1()                # 旧版多机树/干草

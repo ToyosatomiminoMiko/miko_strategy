@@ -1,3 +1,7 @@
+# 本地存档(为什么:重组文件前的原始副本,只用于回溯,不进版本库)
+# 目录内是重组前的 f0~f3 / main*.py / __builtins__.py 快照
+backup/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
