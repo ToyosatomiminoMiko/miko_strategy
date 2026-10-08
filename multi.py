@@ -396,6 +396,7 @@ def old_mian_plant_sunflower():
 
 def old_mian_plant_cactus():
     # 旧版仙人掌调度:32 列并行排序 -> 32 行并行排序 -> 收获
+    # 同步全阻塞
     change_hat(Hats.Brown_Hat)
     while True:
         goto(0, 0)
@@ -417,6 +418,7 @@ def old_mian_plant_cactus():
                 break
         goto(0, 0)
         harvest()
+
 # ==================== 入口 ====================
 if __name__ == "__main__":
     change_hat(Hats.Brown_Hat)

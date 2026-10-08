@@ -21,8 +21,7 @@
 #
 # 作者:miko   整理日期:2026-10-08
 # =============================================================================
-from single import *          # 换玩法时改这一行:single / multi / old_codes
-# from multi import *
+from multi import *
 # from old_codes import *
 
 if __name__ == "__main__":
@@ -38,7 +37,7 @@ if __name__ == "__main__":
     # dino()                     # 恐龙摘 10 个苹果的最小验证
 
     # --- 多线程(把上面 import 换成 multi)---
-    # main_plant_cactus()        # 满田仙人掌:32 列并行排列 -> 32 行并行排行 -> 收获
+    main_plant_cactus()        # 满田仙人掌:32 列并行排列 -> 32 行并行排行 -> 收获
     # main_plant_pumpkin_32x32() # 32 列并行南瓜
     # mian_plant_sunflower()     # 32 列并行向日葵
     # mian_plant_carrot()        # 32 列并行胡萝卜
