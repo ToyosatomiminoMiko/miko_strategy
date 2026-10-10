@@ -44,4 +44,13 @@ main.py   入口   只做一件事:选一行调用(控制台)
 
 ## TuringComplete
 
-Symphony 架构汇编,见 [Symphony.asm](Symphony.asm);包含 `mov`, `neg`, `not`。
+Symphony 架构汇编,见 [Symphony.asm](TuringComplete/Symphony.asm);包含 `mov`, `neg`, `not`。
+游戏里 Stack / Functions / Aliases 三关补齐的 `push`/`pop`/`call`/`ret`/`const` 同样可用。
+
+各关卡程序直接粘进游戏内汇编器运行:[sort.asm](TuringComplete/sort.asm)(排序)、
+[upper.asm](TuringComplete/upper.asm)(首字母大写)、[random.asm](TuringComplete/random.asm)(千变万化)、
+[card.asm](TuringComplete/card.asm)(尼姆博弈)、[hanoi.asm](TuringComplete/hanoi.asm)(汉诺塔,无 push/pop/call/ret 的迭代解法)。
+
+[hanoi_check.py](TuringComplete/hanoi_check.py) 是离线校验器:Symphony 子集解释器 + 汉诺塔关卡判定脚本,
+`python3 TuringComplete/hanoi_check.py` 会先核对助记符是否全在 Symphony.asm 里,再跑完 18 种盘数/方向组合,
+并顺带自检解释器本身。
